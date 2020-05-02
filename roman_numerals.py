@@ -36,7 +36,7 @@ class RomanNumeral:
 
 
     def roman_to_int(self):
-        """Converts roman numerals to integers."""
+        """Takes in user_input in roman numerals and return the equivalent integer."""
         rom_values = list(self.rom_dict.items())
         for i in range(len(self.number) - 1):
             for j in range(len(rom_values)):
