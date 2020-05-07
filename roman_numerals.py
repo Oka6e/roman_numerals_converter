@@ -48,6 +48,7 @@ class RomanNumeral:
     def non_subtractive_numberals(self):
         """Tag for V, L, and D. Can never be subtracted."""
 
-user_input = input("Enter a number in roman numerals: ")
-x = RomanNumeral(user_input)
-x.roman_or_int()
+if __name__ == '__main__':
+    user_input = input("Enter a number in roman numerals: ")
+    x = RomanNumeral(user_input)
+    x.roman_or_int()
