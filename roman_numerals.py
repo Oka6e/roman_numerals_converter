@@ -15,7 +15,12 @@ class RomanNumeral:
                     self.int_num += rom_values[j][1] 
                     for k in range(j+1, len(rom_values)):
                         if self.number[i+1] == rom_values[k][0]:
-                            self.int_num -= 2*rom_values[j][1] 
+                            if self.number[i]=='I' or self.number[i]=='X' or \
+                                self.number[i]=='C' or self.number[i]=='M':
+                                self.int_num -= 2*rom_values[j][1]
+                            else:
+                                return "V, L, and D cannot be before Roman Numerals of greater value."
+                                
         for l in range(len(rom_values)):
             if self.number[-1] == rom_values[l][0]:
                 self.int_num += rom_values[l][1]  
@@ -30,8 +35,8 @@ class RomanNumeral:
 
     def roman_or_int(self):
         """Checks if user input is a roman numeral, integer, or not."""
-        if self.IXC_triple_rules() is True:
-            return False
+        if self.IXC_triple_rules():
+            return
         elif self.isroman():
             print(self.roman_to_int())
         elif self.number.isdigit():
@@ -45,10 +50,18 @@ class RomanNumeral:
             print("You cannot have more than three I, X, or Cs in a row")
             return True
     
-    def non_subtractive_numberals(self):
-        """Tag for V, L, and D. Can never be subtracted."""
+    # def subtractive_rules(self,rom_values):
+    #     """Subtractive Rules for Roman Numerals."""
+    #     if self.number[i]=='I' or self.number[i]=='X' or self.number[i]=='C' or self.number[i]=='M':
+    #         self.int_num -= 2*rom_values[j][1]
+    #     else: 
+    #         print("You cannot have V, L or D before Roman Numerals of greater value.")
+            
 
 if __name__ == '__main__':
-    user_input = input("Enter a number in roman numerals: ")
-    x = RomanNumeral(user_input)
-    x.roman_or_int()
+    while True:
+        user_input = input("Enter a number in roman numerals: ")
+        if user_input == "":
+            exit()
+        x = RomanNumeral(user_input)
+        x.roman_or_int()
