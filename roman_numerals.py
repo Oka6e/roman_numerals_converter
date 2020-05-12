@@ -7,13 +7,16 @@ class RomanNumeral:
         self.rom_num = ''
         self.rom_dict = {'I':1, 'V':5, 'X':10, 'L':50, 'C':100, 'D':500, 'M':1000} 
 
-    def rom_to_int(self): # Probably better to use a linked list here.
+    def rom_to_int(self): # next() function? BUG: LXD and DXL give wrong answers.
         """Takes in user_input in roman numerals and return the equivalent integer."""
-        rom_lst = list(self.rom_dict.items())
-        for i in range(len(self.number) - 1): 
+        rom_lst = list(self.rom_dict.items()) # DXL
+        for i in range(len(self.number)-1):
             for j in range(len(rom_lst)): 
                 if self.number[i] == rom_lst[j][0]: 
-                    self.int_num += rom_lst[j][1] 
+                    self.int_num += rom_lst[j][1]
+                    print(self.int_num)
+                    # if i == len(self.number) - 1:
+                    #     self.int_num += rom_lst[j][1]
                     for k in range(j+1, len(rom_lst)):
                         if self.number[i+1] == rom_lst[k][0]:
                             if self.number[i]=='I' or self.number[i]=='X' or \
