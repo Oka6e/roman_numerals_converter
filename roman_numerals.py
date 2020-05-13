@@ -7,33 +7,36 @@ class RomanNumeral:
         self.rom_num = ''
         self.rom_dict = {'I':1, 'V':5, 'X':10, 'L':50, 'C':100, 'D':500, 'M':1000} 
 
-    def rom_to_int(self): # next() function? BUG: LXD and DXL give wrong answers.
+    def rom_to_int(self): # next() function? LXD and DXL give wrong answers.
         """Takes in user_input in roman numerals and return the equivalent integer."""
-        rom_lst = list(self.rom_dict.items()) # DXL
-        for i in range(len(self.number)-1):
-            for j in range(len(rom_lst)): 
-                if self.number[i] == rom_lst[j][0]: 
-                    self.int_num += rom_lst[j][1]
-                    print(self.int_num)
-                    # if i == len(self.number) - 1:
-                    #     self.int_num += rom_lst[j][1]
-                    for k in range(j+1, len(rom_lst)):
-                        if self.number[i+1] == rom_lst[k][0]:
-                            if self.number[i]=='I' or self.number[i]=='X' or \
-                                self.number[i]=='C' or self.number[i]=='M':
-                                self.int_num -= 2*rom_lst[j][1]
-                            else:
-                                return "V, L, and D cannot be before Roman Numerals of greater value."
-                                
-        for l in range(len(rom_lst)):
-            if self.number[-1] == rom_lst[l][0]:
-                self.int_num += rom_lst[l][1]  
-        return self.int_num 
+        for i in range(len(self.number)-1): # iterates through the string of roman numerals.
+            # subtraction rules
+            if self.number[i] == 'I' and (self.number[i+1] == 'V' or self.number[i+1] == 'X'):
+                self.int_num -= 1
+                continue
+            elif self.number[i] == 'X' and (self.number[i+1] == 'L' or self.number[i+1] == 'C'):
+                self.int_num -= 10
+                continue
+            elif self.number[i] == 'C' and (self.number[i+1] == 'D' or self.number[i+1] == 'M'):
+                self.int_num -= 100
+                continue
+            # or add roman numerals normally
+            else:
+                for k, v in self.rom_dict.items():
+                    if self.number[i] == k:
+                        self.int_num += v
 
+        # Add the last roman numeral
+        for k,v in self.rom_dict.items():
+            if self.number[-1] == k:
+                self.int_num += v
+  
+        return self.int_num
+    
     def int_to_rom(self):
         """Takes the user input of integer and converts it to Roman Numerals."""
-        rom_lst = list(self.rom_dict.items()) # creates a list of the values of roman numerals
-        rev_rom_lst = rom_lst[::-1] # reverse the list order from greatest to least
+        self.rom_lst = list(self.rom_dict.items()) # creates a list of the values of roman numerals
+        rev_rom_lst = self.rom_lst[::-1] # reverse the list order from greatest to least
         number = int(self.number)
         lst_len = len(rev_rom_lst)
         i = 0
@@ -56,22 +59,22 @@ class RomanNumeral:
     def isroman(self):
         """Checks if user input is a roman numeral."""
         for i in self.number:
-                if i not in self.rom_dict.keys():
-                    return False
+            if i not in self.rom_dict.keys():
+                return False
+        if self.IXC_triple_rules():
+            return False
+        elif self.precedence_rules():
+            return False
         return True
 
     def roman_or_int(self):
         """Checks if user input is a roman numeral, integer, or not."""
-        if self.IXC_triple_rules():
-            return
-        elif self.VLD_double_rules():
-            return
-        elif self.isroman():
-            print(self.rom_to_int())
-        elif self.number.isdigit():
+        if self.number.isdigit():
             print(self.int_to_rom())
+        elif self.isroman():
+            print("The integer value is: " + str(self.rom_to_int()) + ".\n")
         else:
-            print("Entry is neither roman numerals or integers.")
+            print("Entry is neither in roman numerals or an integer.\n")
     
     def IXC_triple_rules(self):
         """Tag if user input has more than 3 I, X, or C in a row."""
@@ -79,11 +82,37 @@ class RomanNumeral:
             print("You cannot have more than three I, X, or Cs in a row")
             return True
 
-    def VLD_double_rules(self):
-        """Tag if user input has more than 2 V, L , or D in a row."""
-        if "VV" in self.number or "LL" in self.number or "DD" in self.number:
-            print("You cannot have more than two V, L, or Ds in a row")
-            return True
+    # def VLD_double_rules(self):
+    #     """Tag if user input has more than 2 V, L , or D in a row."""
+    #     if "VV" in self.number or "LL" in self.number or "DD" in self.number:
+    #         print("You cannot have more than two V, L, or Ds in a row")
+    #         return True
+
+
+    # {'I':1, 'V':5, 'X':10, 'L':50, 'C':100, 'D':500, 'M':1000} 
+    def precedence_rules(self):
+        for i in range(len(self.number) - 1):
+            if self.number[i] == 'I' and (self.number[i+1] == 'L' or self.number[i+1] == 'C' or \
+                self.number[i+1] == 'D' or self.number[i+1] == 'M'):
+                print("'I' cannot precede 'L', 'C', 'D', and 'M'.")
+                return True
+            elif self.number[i] == 'X' and (self.number[i+1] == 'D' or self.number[i+1] == 'M'):
+                print("'X' can only precede itself, 'I', 'V', 'L', and 'C'.")
+                return True
+            elif self.number[i] == 'C' and (self.number[i+1] == 'C' or self.number[i+1] != 'D' or self.number[i+1] != 'M'):
+                print("'C' can only precede itself, 'D', and 'M'.")
+                return True
+            elif self.number[i] == 'V' and self.number[i+1] != 'I':
+                print("'V' can only precede 'I'.")
+                return True
+            elif self.number[i] == 'L' and (self.number[i+1] != 'I' or self.number[i+1] != 'V' or \
+                self.number[i+1] != 'X'):
+                print("'L' can only precede 'I', 'V', or 'X'.")
+                return True
+            elif self.number[i] == 'D' and (self.number[i+1] == 'D' or self.number[i+1] == 'M'):
+                print("'V' can only precede 'I', 'V', 'X', 'L', or 'C'.")
+                return True
+        return False
 
 if __name__ == '__main__':
     while True:
