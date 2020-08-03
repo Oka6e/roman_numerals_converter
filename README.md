@@ -56,7 +56,7 @@ python3.7 roman_numerals_converter.git
 
 > The digit or digits of lower value is/are placed after or before the digit of higher value. 
 The value of digits of lower value is added to or subtracted from the value of digit of higher value. 
-Using the certain rules for formation of Roman-numerals is given below.
+Using the certain rules for formation of Roman-numerals is given below. \
 **Rule 1:** The roman digits I, X and C are repeated upto three times in succession to form the numbers. \
 **Rule 2:** When a digit of lower value is written to the right or after a digit of higher value, the 
 values of all the digits are added. Value of similar digits are also added as indicated in rule 1 \
